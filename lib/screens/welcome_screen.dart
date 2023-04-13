@@ -27,8 +27,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: <Widget>[
                 Hero(
                   tag: kLogoTag,
-                  child: SizedBox(
-                    height: 60.0,
+                  child: TweenAnimationBuilder(
+                    tween: Tween<double>(
+                      begin: 0,
+                      end: 60,
+                    ),
+                    duration: const Duration(seconds: 1),
+                    builder:
+                        (BuildContext context, double value, Widget? child) {
+                      return SizedBox(
+                        height: value.toDouble(),
+                        child: child,
+                      );
+                    },
                     child: Image.asset('images/logo.png'),
                   ),
                 ),
