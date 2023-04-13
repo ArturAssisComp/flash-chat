@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const String kLogoTag = 'logo_tag';
+
 const kSendButtonTextStyle = TextStyle(
   color: Colors.lightBlueAccent,
   fontWeight: FontWeight.bold,
