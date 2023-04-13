@@ -13,6 +13,9 @@ class InputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style: const TextStyle(
+        color: Colors.black,
+      ),
       onChanged: onChanged,
       decoration: kDefaultInputFieldDecoration.copyWith(
         hintText: hintText,
