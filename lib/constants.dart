@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 const String kLogoTag = 'logo_tag';
-
+const String kLogoPath = 'images/logo.png';
+const double kFinalLogoHeightLoginPage = 200;
 const kSendButtonTextStyle = TextStyle(
   color: Colors.lightBlueAccent,
   fontWeight: FontWeight.bold,

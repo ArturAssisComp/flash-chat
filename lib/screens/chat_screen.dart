@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 
+//Constants:
+const Widget _kTitle = Text('⚡️Chat');
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
@@ -23,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 //Implement logout functionality
               }),
         ],
-        title: const Text('⚡️Chat'),
+        title: _kTitle,
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
