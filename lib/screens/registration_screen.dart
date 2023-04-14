@@ -7,6 +7,7 @@ import 'package:flash_chat/widgets/password_input.dart';
 import 'package:flash_chat/widgets/space_between.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -21,6 +22,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   String? _email;
   String? _password;
+  bool _saving = false;
 
   Future<bool> _registerUser() async {
     if (_email != null && _password != null) {
@@ -43,46 +45,57 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            const HeroImageAsset(
-                tag: kLogoTag, height: 200, imageAssetName: 'images/logo.png'),
-            const SpaceBetween(
-              verticalSpace: 48,
-            ),
-            EmailInput(
-              onChanged: (value) {
-                _email = value;
-              },
-            ),
-            const SpaceBetween(
-              verticalSpace: 8,
-            ),
-            PasswordInput(
-              onChanged: (value) {
-                _password = value;
-              },
-            ),
-            const SpaceBetween(
-              verticalSpace: 24,
-            ),
-            BasicButton(
-              text: 'Register',
-              onPressed: () async {
-                final bool userCreated = await _registerUser();
-                if (userCreated) {
-                  _gotoChatScreen();
-                }
-              },
-              color: Colors.blueAccent,
-            ),
-          ],
+    return ModalProgressHUD(
+      inAsyncCall: _saving,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const HeroImageAsset(
+                  tag: kLogoTag,
+                  height: 200,
+                  imageAssetName: 'images/logo.png'),
+              const SpaceBetween(
+                verticalSpace: 48,
+              ),
+              EmailInput(
+                onChanged: (value) {
+                  _email = value;
+                },
+              ),
+              const SpaceBetween(
+                verticalSpace: 8,
+              ),
+              PasswordInput(
+                onChanged: (value) {
+                  _password = value;
+                },
+              ),
+              const SpaceBetween(
+                verticalSpace: 24,
+              ),
+              BasicButton(
+                text: 'Register',
+                onPressed: () async {
+                  setState(() {
+                    _saving = true;
+                  });
+                  final bool userCreated = await _registerUser();
+                  setState(() {
+                    _saving = false;
+                  });
+                  if (userCreated) {
+                    _gotoChatScreen();
+                  }
+                },
+                color: Colors.blueAccent,
+              ),
+            ],
+          ),
         ),
       ),
     );

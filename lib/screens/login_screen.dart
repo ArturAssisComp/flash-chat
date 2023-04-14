@@ -7,6 +7,7 @@ import 'package:flash_chat/widgets/basic_button.dart';
 import 'package:flash_chat/widgets/password_input.dart';
 import 'package:flash_chat/widgets/email_input.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _email;
   String? _password;
   final _auth = FirebaseAuth.instance;
+  bool _saving = false;
 
   Future<bool> _tryLoginUser() async {
     if (_email != null && _password != null) {
@@ -43,48 +45,57 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            const HeroImageAsset(
-                tag: kLogoTag,
-                height: kFinalLogoHeightLoginPage,
-                imageAssetName: kLogoPath),
-            const SpaceBetween(
-              verticalSpace: 48,
-            ),
-            EmailInput(
-              onChanged: (value) {
-                _email = value;
-              },
-            ),
-            const SpaceBetween(
-              verticalSpace: 8,
-            ),
-            PasswordInput(
-              onChanged: (value) {
-                _password = value;
-              },
-            ),
-            const SpaceBetween(
-              verticalSpace: 24,
-            ),
-            BasicButton(
-              text: 'Log In',
-              onPressed: () async {
-                final bool loggedSuccessfully = await _tryLoginUser();
-                if (loggedSuccessfully) {
-                  _gotoChatScreen();
-                }
-              },
-              color: Colors.lightBlueAccent,
-            ),
-          ],
+    return ModalProgressHUD(
+      inAsyncCall: _saving,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const HeroImageAsset(
+                  tag: kLogoTag,
+                  height: kFinalLogoHeightLoginPage,
+                  imageAssetName: kLogoPath),
+              const SpaceBetween(
+                verticalSpace: 48,
+              ),
+              EmailInput(
+                onChanged: (value) {
+                  _email = value;
+                },
+              ),
+              const SpaceBetween(
+                verticalSpace: 8,
+              ),
+              PasswordInput(
+                onChanged: (value) {
+                  _password = value;
+                },
+              ),
+              const SpaceBetween(
+                verticalSpace: 24,
+              ),
+              BasicButton(
+                text: 'Log In',
+                onPressed: () async {
+                  setState(() {
+                    _saving = true;
+                  });
+                  final bool loggedSuccessfully = await _tryLoginUser();
+                  setState(() {
+                    _saving = false;
+                  });
+                  if (loggedSuccessfully) {
+                    _gotoChatScreen();
+                  }
+                },
+                color: Colors.lightBlueAccent,
+              ),
+            ],
+          ),
         ),
       ),
     );
