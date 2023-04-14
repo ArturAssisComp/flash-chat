@@ -3,7 +3,8 @@ import 'package:flash_chat/widgets/space_between.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/widgets/hero_image_asset.dart';
 import 'package:flash_chat/widgets/basic_button.dart';
-import 'package:flash_chat/widgets/input_field.dart';
+import 'package:flash_chat/widgets/password_input.dart';
+import 'package:flash_chat/widgets/email_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -32,17 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
             const SpaceBetween(
               verticalSpace: 48,
             ),
-            InputField(
-              onChanged: (val) {},
-              hintText: 'Enter your email.',
-            ),
+            const EmailInput(),
             const SpaceBetween(
               verticalSpace: 8,
             ),
-            InputField(
-              onChanged: (val) {},
-              hintText: 'Enter your password.',
-            ),
+            const PasswordInput(),
             const SpaceBetween(
               verticalSpace: 24,
             ),
