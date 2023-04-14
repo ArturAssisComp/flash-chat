@@ -18,14 +18,14 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
   String? _email;
   String? _password;
 
   Future<bool> _registerUser() async {
     if (_email != null && _password != null) {
       try {
-        final userCredentials = await auth.createUserWithEmailAndPassword(
+        final userCredentials = await _auth.createUserWithEmailAndPassword(
             email: _email!, password: _password!);
         if (userCredentials.user != null) {
           return true;

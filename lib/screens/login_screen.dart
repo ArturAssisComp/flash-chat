@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:flash_chat/widgets/space_between.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flash_chat/widgets/hero_image_asset.dart';
 import 'package:flash_chat/widgets/basic_button.dart';
 import 'package:flash_chat/widgets/password_input.dart';
 import 'package:flash_chat/widgets/email_input.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +18,29 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String? _email;
+  String? _password;
+  final _auth = FirebaseAuth.instance;
+
+  Future<bool> _tryLoginUser() async {
+    if (_email != null && _password != null) {
+      try {
+        final userCredentials = await _auth.signInWithEmailAndPassword(
+            email: _email!, password: _password!);
+        if (userCredentials.user != null) {
+          return true;
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+    return false;
+  }
+
+  void _gotoChatScreen() {
+    Navigator.pushNamed(context, ChatScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,17 +58,30 @@ class _LoginScreenState extends State<LoginScreen> {
             const SpaceBetween(
               verticalSpace: 48,
             ),
-            const EmailInput(),
+            EmailInput(
+              onChanged: (value) {
+                _email = value;
+              },
+            ),
             const SpaceBetween(
               verticalSpace: 8,
             ),
-            const PasswordInput(),
+            PasswordInput(
+              onChanged: (value) {
+                _password = value;
+              },
+            ),
             const SpaceBetween(
               verticalSpace: 24,
             ),
             BasicButton(
               text: 'Log In',
-              onPressed: () {},
+              onPressed: () async {
+                final bool loggedSuccessfully = await _tryLoginUser();
+                if (loggedSuccessfully) {
+                  _gotoChatScreen();
+                }
+              },
               color: Colors.lightBlueAccent,
             ),
           ],
