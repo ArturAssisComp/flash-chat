@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flash_chat/widgets/stream_of_messages.dart';
 
 //Constants:
 const Widget _kTitle = Text('⚡️Chat');
@@ -19,6 +20,7 @@ class _ChatScreenState extends State<ChatScreen> {
   String? _message;
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  TextEditingController _textEditingController = TextEditingController();
 
   void _getUser() {
     final User? user = _auth.currentUser;
@@ -54,29 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            StreamBuilder(
-              stream: _firestore.collection('messages').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                }
-                List<Text> messages = [];
-                final messageSnapshot = snapshot.data;
-                if (messageSnapshot != null) {
-                  for (final message in messageSnapshot.docs) {
-                    messages.add(
-                      Text(
-                        'M: ${message.get('text')} from: ${message.get('sender')}',
-                      ),
-                    );
-                  }
-                }
-
-                return Column(
-                  children: messages,
-                );
-              },
-            ),
+            StreamOfMessages(firestore: _firestore),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -84,6 +64,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: _textEditingController,
                       onChanged: (value) {
                         //Do something with the user input.
                         _message = value;
@@ -98,6 +79,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         'text': _message,
                         'sender': _auth.currentUser?.email,
                       });
+                      _textEditingController.clear();
                     },
                     child: const Text(
                       'Send',
