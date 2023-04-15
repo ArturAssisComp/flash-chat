@@ -20,13 +20,16 @@ class _ChatScreenState extends State<ChatScreen> {
   String? _message;
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  String? _userId;
   TextEditingController _textEditingController = TextEditingController();
 
   void _getUser() {
     final User? user = _auth.currentUser;
     if (user == null) {
       Navigator.pop(context);
+      return;
     }
+    _userId = user.email!;
   }
 
   @override
@@ -56,7 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            StreamOfMessages(firestore: _firestore),
+            StreamOfMessages(firestore: _firestore, userId: _userId!),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(

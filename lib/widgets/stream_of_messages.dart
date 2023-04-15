@@ -5,15 +5,17 @@ import 'package:flash_chat/widgets/message_bubble.dart';
 class StreamOfMessages extends StatelessWidget {
   const StreamOfMessages({
     super.key,
-    required FirebaseFirestore firestore,
-  }) : _firestore = firestore;
+    required this.firestore,
+    required this.userId,
+  });
 
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore firestore;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: _firestore.collection('messages').snapshots(),
+      stream: firestore.collection('messages').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
@@ -27,7 +29,7 @@ class StreamOfMessages extends StatelessWidget {
             text = message.get('text');
             sender = message.get('sender');
             messages.add(
-              MessageBubble(text: text, sender: sender),
+              MessageBubble(text: text, sender: sender, currentUser: userId),
             );
           }
         }

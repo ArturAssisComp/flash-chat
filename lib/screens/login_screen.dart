@@ -55,10 +55,12 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const HeroImageAsset(
-                  tag: kLogoTag,
-                  height: kFinalLogoHeightLoginPage,
-                  imageAssetName: kLogoPath),
+              const Flexible(
+                child: HeroImageAsset(
+                    tag: kLogoTag,
+                    height: kFinalLogoHeightLoginPage,
+                    imageAssetName: kLogoPath),
+              ),
               const SpaceBetween(
                 verticalSpace: 48,
               ),

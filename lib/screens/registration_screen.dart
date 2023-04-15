@@ -55,10 +55,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const HeroImageAsset(
-                  tag: kLogoTag,
-                  height: 200,
-                  imageAssetName: 'images/logo.png'),
+              const Flexible(
+                child: HeroImageAsset(
+                    tag: kLogoTag,
+                    height: 200,
+                    imageAssetName: 'images/logo.png'),
+              ),
               const SpaceBetween(
                 verticalSpace: 48,
               ),
